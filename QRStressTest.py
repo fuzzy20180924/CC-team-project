@@ -21,7 +21,7 @@ def stressTest(n=100, debug=0):
 
         # this output needs to be the 0 - 1 matrix BEFORE
         # logistic map XOR
-        encoded_string, origmatrix = QREncoder.QREncode(msg)
+        encoded_string, origmatrix = QREncoder.QRencoder().encode(msg, pre_logit=True)
 
         # enlarge the size and generate random noise
         enlarged_string = enlarge_and_random(origmatrix)

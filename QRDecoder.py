@@ -30,7 +30,7 @@ FORMAT_HEX = '032b'
 
 
 # --- Core --- #
-def QRDecode(encoding_string):
+def QRdecode(encoding_string):
     # STEP 0: generate 0-1 matrix from input string
     status, InputMatrix = __generate_matrix(encoding_string)
 
