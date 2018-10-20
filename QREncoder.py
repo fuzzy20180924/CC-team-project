@@ -14,7 +14,7 @@ class EncoderError(Exception):
     def __init__(self, *msg):
             self.args = msg
             
-class QRencoder(object):
+class QRencode(object):
     def __init__(self):
         self.POS_21x21, self.POS_25x25 = self._generate_patterns()
         LOGIMAP = SharedConstants.LOGIMAP.copy()

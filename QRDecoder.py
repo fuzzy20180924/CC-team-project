@@ -97,7 +97,7 @@ def __pattern_matching(matrix):
     """
     # convert the matrix into 1D 0-1 string
     m1d = matrix.ravel()
-    mstring = ''.join([str(x) for x in m1d])
+    mstring = ''.join((str(x) for x in m1d))
     match = []
     sizetype = -1
     # find pattern
