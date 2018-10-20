@@ -168,4 +168,4 @@ def __extract_payload(result):
 if __name__ == "__main__":
     status, output = QRDecode(sample_input)
     print(sample_output)
-    print(output)
+    print(output == sample_output)
