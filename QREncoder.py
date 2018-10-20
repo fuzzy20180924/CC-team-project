@@ -3,7 +3,8 @@ import numpy as np
 import os
 from itertools import cycle
 import SharedConstants
-import generate_zigzag
+#import generate_zigzag
+from functools import reduce
 
 PATTERN_FOLDER = "patterns"
 POS_21x21 = "21x21_fill_in_position_array.npy"
@@ -23,7 +24,7 @@ class QRencoder(object):
         self.BASE_21x21 = np.genfromtxt('patterns/21x21_special_pattern.csv', delimiter=',')
         self.BASE_21x21[self.BASE_21x21 >=0] = 0
         self.BASE_21x21[self.BASE_21x21 == -1] = 1
-        self.BASE_21x21[self.BASE_21x21 == -2] = 0 
+        self.BASE_21x21[self.BASE_21x21 == -2] = 0
         self.BASE_21x21 = self.BASE_21x21.astype(np.uint8)
         self.BASE_25x25 = np.genfromtxt('patterns/25x25_special_pattern.csv', delimiter=',')
         self.BASE_25x25[self.BASE_25x25 >= 0] = 0
@@ -49,7 +50,7 @@ class QRencoder(object):
         
     def _to_ascii(self, input_msg):
         try:
-            input_msg.decode("ascii")
+            pass #input_msg.decode("ascii")
         except UnicodeDecodeError:
             print("Invalid message={}".format(input_msg)) 
             raise EncoderError(input_msg)
@@ -70,7 +71,7 @@ class QRencoder(object):
         if num_byte <= 13:
             pattern = self.BASE_21x21.copy()
             POS = self.POS_21x21.copy()
-        elif 14 < num_byte and num_byte <= 22:
+        elif 14 <= num_byte and num_byte <= 22:
             pattern = self.BASE_25x25.copy()
             POS = self.POS_25x25.copy()
         else:
@@ -91,7 +92,7 @@ class QRencoder(object):
         fill = cycle('1110110000010001')
         while ind < len_POS:
             pos = POS[ind]
-            pattern[pos[0]][pos[1]] = int(fill.next())
+            pattern[pos[0]][pos[1]] = int(next(fill))
             ind+=1
         pattern_flat = pattern.flatten()
         logi_encrypts = np.zeros(len(pattern_flat),dtype=np.uint8)

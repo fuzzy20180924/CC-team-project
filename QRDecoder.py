@@ -14,7 +14,7 @@ from SharedConstants import SELECT21, SELECT25
 
 # comment out during deployment
 sample_input = '0x2b23d6830x15a0de0d0x744784010x29e880700xfe1adf5c0xb96061290x1127b67c0x311690430xc63153140xf6e00650x92d3960b0xf59a79070x704e73d40x977fd8090xf516e98a0x3e0c19f10xac626d040x6a3e58650xca85aa3e0x6266b640x842ddcb40x4e7c879c0x85dd21240x3afae3dc0xe07908a70x664685970xb38246f70x511908330x40a111ee0xc12c8fd10x82984c520x4ddee6f6'
-sample_output = 'CC Team is awesome!'
+sample_output = 'm_ðË/'
 
 # --- ERROR MESSAGES --- #
 ERROR_HEADER = "DECODER ERROR: "
@@ -166,6 +166,6 @@ def __extract_payload(result):
 # --- Test --- #
 # comment out during deployment
 if __name__ == "__main__":
-    status, output = QRDecode(sample_input)
+    status, output = QRdecode(sample_input)
     print(sample_output)
     print(output == sample_output)
