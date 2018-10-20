@@ -38,12 +38,12 @@ class QRencode(object):
         POS_25x25 = "25x25_fill_in_position_array.npy"
         ZO_21x21 = "21x21_zeroone_pattern.npy"
         ZO_25x25 = "25x25_zeroone_pattern.npy"
-        if not os.path.exists(
-            os.path.join(PATTERN_FOLDER, POS_21x21)):
-            generate_zigzag.generate_21x21_patterns(False)
-        if not os.path.exists(
-            os.path.join(PATTERN_FOLDER, POS_25x25)):
-            generate_zigzag.generate_25x25_patterns(False)
+#        if not os.path.exists(
+#            os.path.join(PATTERN_FOLDER, POS_21x21)):
+#            generate_zigzag.generate_21x21_patterns(False)
+#        if not os.path.exists(
+#            os.path.join(PATTERN_FOLDER, POS_25x25)):
+#            generate_zigzag.generate_25x25_patterns(False)
         POS_21x21 = np.load(os.path.join(PATTERN_FOLDER, POS_21x21))
         POS_25x25 = np.load(os.path.join(PATTERN_FOLDER, POS_25x25))
         return POS_21x21, POS_25x25
