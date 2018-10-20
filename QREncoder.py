@@ -13,7 +13,7 @@ class EncoderError(Exception):
     def __init__(self, *msg):
             self.args = msg
             
-class QRencoder(object):
+class QRencode(object):
     def __init__(self):
         self.POS_21x21, self.POS_25x25 = self._generate_patterns()
         LOGIMAP = SharedConstants.LOGIMAP.copy()
@@ -35,8 +35,6 @@ class QRencoder(object):
         PATTERN_FOLDER = "patterns"
         POS_21x21 = "21x21_fill_in_position_array.npy"
         POS_25x25 = "25x25_fill_in_position_array.npy"
-        ZO_21x21 = "21x21_zeroone_pattern.npy"
-        ZO_25x25 = "25x25_zeroone_pattern.npy"
         if not os.path.exists(
             os.path.join(PATTERN_FOLDER, POS_21x21)):
             generate_zigzag.generate_21x21_patterns(False)
@@ -118,7 +116,7 @@ class QRencoder(object):
 # --- Test --- #
 # comment out during deployment
 if __name__ == "__main__":
-    encoder = QRencoder()
+    encoder = QRencode()
     sample1 = "CC Team"
     ref_out1 = "0x66d92b800x5bc76d830x121a7fa60x51c111870x3a5f3ca30x8be36a130xedb223a0xfc8e98780x33bf50de0x2e8709700x545a2d0f0xecef7ae0x461175cd0xff132a"
     output_string = encoder.encode(sample1)
