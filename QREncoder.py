@@ -67,6 +67,10 @@ class QRencode(object):
     
     def encode(self, input_msg, pre_logit=False):
         ascii_list = self._to_ascii(input_msg)
+        binary_ascii_list = [format(i, '08b') for i in ascii_list]
+        correcting_code = [reduce(lambda x,y: int(x)^int(y),c) for c in binary_ascii_list]
+        binary_correcting_code = [format(i, '08b') for i in correcting_code]
+        #correcting_code = self._get_error_correcting_code(ascii_list)
         num_byte = len(input_msg)
         if num_byte <= 13:
             pattern = self.BASE_21x21.copy()
@@ -76,20 +80,19 @@ class QRencode(object):
             POS = self.POS_25x25.copy()
         else:
             raise EncoderError("Invalid length")
-        correcting_code = self._get_error_correcting_code(ascii_list)
+        
         ascii_correcting = 2*num_byte*[0]
-        ascii_correcting[::2] = ascii_list
-        ascii_correcting[1::2] = correcting_code
-        bit_seq = reduce(lambda x,y:x+y, [format(i, '08b') for i in [num_byte]+ascii_correcting])
+        ascii_correcting[::2] = binary_ascii_list
+        ascii_correcting[1::2] = binary_correcting_code
+        bit_seq = reduce(lambda x,y:x+y, [i for i in [format(num_byte, '08b')]+ascii_correcting])
         ind = 0
         len_bit_seq = len(bit_seq)
-
         while ind < len_bit_seq:
             pos = POS[ind]
             pattern[pos[0]][pos[1]] = int(bit_seq[ind])
             ind+=1
         len_POS = len(POS)
-        fill = cycle('1110110000010001')
+        fill = cycle([1,1,1,0,1,1,0,0,0,0,0,1,0,0,0,1])
         while ind < len_POS:
             pos = POS[ind]
             pattern[pos[0]][pos[1]] = int(next(fill))
@@ -97,20 +100,22 @@ class QRencode(object):
         pattern_flat = pattern.flatten()
         logi_encrypts = np.zeros(len(pattern_flat),dtype=np.uint8)
         len_pattern = len(pattern_flat)
-        
         p1 = 0
         while  p1< len_pattern:    
             p2 = min(len_pattern, p1+8)
             logi_encrypts[p1:p2] = pattern_flat[p1:p2] ^ self.logit_bits[int(p1/8)][:(p2-p1)]
             p1 = p2
+        logi_encrypts = logi_encrypts.astype(str)
         if num_byte <= 13:
             output_string = ""
             for ind in range(14):
-                output_string+=hex(int("".join([str(i) for i in logi_encrypts[32*ind:32*(ind+1)]]),2))
+                output_string+=hex(int("".join([i for i in logi_encrypts[32*ind:32*(ind+1)]]),2))
+                #output_string+=hex(np.packbits(logi_encrypts[32*ind:32*(ind+1)]))
         else:
             output_string = ""
             for ind in range(20):
-                output_string+=hex(int("".join([str(i) for i in logi_encrypts[32*ind:32*(ind+1)]]),2))
+                output_string+=hex(int("".join([i for i in logi_encrypts[32*ind:32*(ind+1)]]),2))
+                #output_string+=hex(np.packbits(logi_encrypts[32*ind:32*(ind+1)]))
         if pre_logit:
             return output_string, pattern
         else:
